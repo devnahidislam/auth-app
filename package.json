@@ -1,0 +1,17 @@
+{
+  "name": "login_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd ./client && npm run dev",
+    "server": "cd ./server && nodemon server.js",
+    "dev": "concurrently \"cd ./server && npm run server\" \"cd ./client && npm run dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
