@@ -33,7 +33,7 @@ const Username = () => {
             <div className="profile flex justify-center py-3">
               <img className={styles.profile_img} src={avatar} alt="avatar" />
             </div>
-            <div className="textbox flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-6">
               <input
                 {...formik.getFieldProps("username")}
                 className={styles.textbox}
