@@ -84,7 +84,7 @@ const Profile = () => {
                   {...formik.getFieldProps("email")}
                   className={styles.textbox}
                   type="email"
-                  placeholder="Email*"
+                  placeholder="Email"
                 />
               </div>
               <input
