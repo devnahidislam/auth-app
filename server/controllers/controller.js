@@ -1,9 +1,19 @@
 import UserModel from "../model/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 /** middleware for verify user */
-export const verifyUser = async (req, res) => {
-  res.json("verifyUser route");
+export const verifyUser = async (req, res, next) => {
+  try {
+    const { username } = req.method === "GET" ? req.query : req.body; // extract the username from either query or body depending on the HTTP method
+
+    const user = await UserModel.findOne({ username }); // look up user by username
+    if (!user) return res.status(404).send({ error: "Can't find User!" }); // handle case where user is not found
+
+    next(); // proceed to the next middleware function or route handler
+  } catch (error) {
+    return res.status(404).send({ error: "Authentication Error" }); // handle any other errors
+  }
 };
 
 /** POST: http://localhost:8080/api/register 
@@ -56,13 +66,52 @@ export const register = async (req, res) => {
   "password" : "admin123"
 }
 */
+
 export const login = async (req, res) => {
-  res.json("login route");
+  const { username, password } = req.body;
+
+  try {
+    const user = await UserModel.findOne({ username }); // look up user by username
+    if (!user) return res.status(404).send({ error: "User not Found" }); // handle case where user is not found
+
+    const passwordMatch = await bcrypt.compare(password, user.password); // compare hashed password with password received in request
+    if (!passwordMatch)
+      return res.status(400).send({ error: "Password does not match" }); // handle case where password does not match
+
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    ); // create JWT token
+    return res
+      .status(200)
+      .send({ msg: "Login Successful!", username: user.username, token }); // return success response with token
+  } catch (error) {
+    return res.status(500).send({ error }); // handle any other errors
+  }
 };
 
 /** GET: http://localhost:8080/api/user/example123 */
 export const getUser = async (req, res) => {
-  res.json("getUser route");
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).send({ error: "Invalid username" });
+  }
+
+  try {
+    const user = await UserModel.findOne({ username });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const { password, ...userData } = user.toJSON();
+
+    return res.status(200).send(userData);
+  } catch (error) {
+    return res.status(500).send({ error: "Server error" });
+  }
 };
 
 /** PUT: http://localhost:8080/api/updateuser 

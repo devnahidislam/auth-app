@@ -7,8 +7,8 @@ const connectDB = async (req, res) => {
 
   try {
     mongoose.set("strictQuery", true);
-    await mongoose.connect(getUri);
-    // await mongoose.connect(process.env.MONGO_URI);
+    // await mongoose.connect(getUri);
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connection SUCCESS");
   } catch (error) {
     console.error("MongoDB Connection FAILED");
