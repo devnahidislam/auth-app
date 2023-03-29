@@ -20,6 +20,7 @@
     "mongodb-memory-server": "^8.11.5",
     "mongoose": "^7.0.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.21",
+    "otp-generator": "^4.0.1"
   }
 }

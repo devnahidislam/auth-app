@@ -125,7 +125,13 @@ body: {
 }
 */
 export const updateUser = async (req, res) => {
-  res.json("updateUser route");
+  const userId = req.query.id;
+  if (!userId) return res.status(401).json({ error: "User Not Found...!" });
+
+  const body = req.body;
+  UserModel.updateOne({ _id: userId }, body)
+    .then(() => res.status(201).json({ msg: "Record Updated...!" }))
+    .catch((error) => res.status(401).json({ error }));
 };
 
 /** GET: http://localhost:8080/api/generateOTP */
