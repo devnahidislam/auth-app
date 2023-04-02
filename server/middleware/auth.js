@@ -12,3 +12,10 @@ export const Auth = (req, res, next) => {
     res.status(401).json({ error: "Authentication Failed!" });
   }
 };
+export const localVariables = (req, res, next) => {
+  req.app.locals = {
+    OTP: null,
+    resetSession: false,
+  };
+  next();
+};
